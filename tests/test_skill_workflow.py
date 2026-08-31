@@ -93,14 +93,16 @@ def test_model_is_required_before_creating_work_or_downloading(tmp_path):
     assert not (tmp_path / "notes").exists()
 
 
-def test_skill_runner_works_outside_install_directory(tmp_path):
+@pytest.mark.parametrize("via_skill", [True, False])
+def test_skill_runner_works_outside_install_directory(tmp_path, via_skill):
     root = Path(__file__).resolve().parents[1]
     env = os.environ.copy()
     env.pop("BILIDRAFT_MODEL", None)
+    env["PYTHONIOENCODING"] = "ascii"  # Reproduce non-UTF8 Windows pipes on every platform.
     result = subprocess.run(
         [
             sys.executable,
-            str(root / "scripts/run.py"),
+            *([str(root / "scripts/run.py")] if via_skill else ["-m", "bilidraft"]),
             "--workspace",
             str(tmp_path / "isolated"),
             "run",

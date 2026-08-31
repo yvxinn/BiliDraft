@@ -14,6 +14,7 @@ def main():
     env = os.environ.copy()
     env["PYTHONPATH"] = str(ROOT) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
     env["PYTHONUNBUFFERED"] = "1"
+    env["PYTHONIOENCODING"] = "utf-8"
     try:
         return subprocess.call([python, "-m", "bilidraft", *sys.argv[1:]], env=env)
     except KeyboardInterrupt:

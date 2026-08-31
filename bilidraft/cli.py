@@ -1,6 +1,7 @@
 """Command line interface for BiliDraft."""
 
 import json
+import sys
 from pathlib import Path
 from typing import Optional
 import typer
@@ -174,6 +175,11 @@ def init_config(ctx: typer.Context, path: Path = typer.Argument(Path("config/con
 
 
 def main():
+    # Pipes on Windows otherwise inherit an ANSI code page. Agent subprocesses
+    # and JSON consumers require UTF-8 even when the host locale is not Chinese.
+    for stream in (sys.stdout, sys.stderr):
+        if not stream.isatty() and hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="backslashreplace")
     try:
         app()
     except (ValueError, RuntimeError, OSError) as e:
