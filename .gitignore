@@ -1,0 +1,42 @@
+# Local credentials and agent configuration
+/config/*
+!/config/*.example.yaml
+!/config/*.example.json
+.env
+.env.*
+!.env.example
+/.claude/
+/.codex/
+/.agents/
+/.git-backup-*/
+
+# Downloaded media, generated notes, and private task state
+/notes/
+/output/
+/tmp/
+*.log
+*.mp4
+*.mkv
+*.webm
+*.m4a
+*.mp3
+*.wav
+
+# Python and packaging
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Editors and OS files
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store

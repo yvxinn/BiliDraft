@@ -1,0 +1,4 @@
+interface:
+  display_name: "BiliDraft"
+  short_description: "Turn Bilibili videos into full illustrated Markdown"
+  default_prompt: "Use $bilidraft to turn this Bilibili video into a complete illustrated Markdown draft."

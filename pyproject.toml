@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bilidraft"
+version = "0.3.0"
+description = "Bilibili videos to full-length illustrated Markdown transcripts"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["bilibili", "transcript", "markdown", "lecture", "ocr"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Multimedia :: Video",
+]
+requires-python = ">=3.10"
+dependencies = [
+  "typer>=0.12,<1", "requests>=2.31,<3", "PyYAML>=6,<7",
+  "filelock>=3.13,<4", "yt-dlp>=2026.8.19", "numpy>=1.26,<3",
+  "Pillow>=10,<13", "ImageHash>=4.3,<5", "opencv-python>=4.8,<5",
+  "qrcode[pil]>=7.4,<9",
+]
+
+[project.optional-dependencies]
+ocr = ["rapidocr-onnxruntime>=1.4,<2"]
+asr = ["funasr>=1.4.7,<2", "torch>=2.2", "torchaudio>=2.2", "soundfile>=0.12"]
+dev = ["pytest>=8,<10", "ruff>=0.11,<1"]
+
+[project.scripts]
+bilidraft = "bilidraft.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/yvxinn/BiliDraft"
+Issues = "https://github.com/yvxinn/BiliDraft/issues"
+
+[tool.setuptools.packages.find]
+include = ["bilidraft*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

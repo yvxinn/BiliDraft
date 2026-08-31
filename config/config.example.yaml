@@ -1,0 +1,41 @@
+# 路径相对于运行命令的工作目录。API key 请使用环境变量，不要提交真实值。
+text_mode: polish  # raw 保留原始字幕，不调用语言模型
+llm:
+  base_url: http://localhost:11434/v1
+  model: ""  # 配置你的模型，或使用 BILIDRAFT_MODEL 环境变量
+  reasoning_effort: ""  # 跟随供应商默认；Ollama 支持时可用 "none" 减少额外思考
+  api_key_env: BILIDRAFT_API_KEY
+  timeout: 300
+  retries: 2
+  max_workers: 2
+polish:
+  level: light_polish
+  chunk_chars: 600
+  overlap_chars: 70
+  split_retries: 1
+asr:
+  engine: sensevoice
+  device: cpu
+  max_segment_sec: 15
+slides:
+  mode: representative  # representative / detailed / none；密集模式需要 OCR 扩展
+  representative_per_10min: 6
+  max_frames: 60
+  max_workers: 0  # 自动，最多4个任务；设1可降为串行
+  representative_ocr: false  # 默认时间对齐；开启后才识别选中画面
+  ocr_max_side: 960
+  parallel_with_text: true
+  ocr_threads: 2
+  body_per_10min: 8
+align:
+  text_align: true
+  similarity_threshold: 0.5
+quality:
+  min_retention: 0.90
+  max_suspect_ratio: 0.02
+bilibili:
+  max_quality: 1080
+  credential_file: config/credential.json
+  cookies_file: config/cookies.txt
+output_dir: notes
+# ffmpeg: C:/path/to/ffmpeg.exe
