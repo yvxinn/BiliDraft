@@ -100,6 +100,23 @@ def test_failed_gate_never_exports_model_text(cfg, transcript, monkeypatch):
     assert all("raw_fallback" in s["flags"] for s in leaves[0]["segments"])
 
 
+def test_large_chunk_recursively_shrinks_before_raw_fallback(cfg, monkeypatch):
+    cfg.polish.split_retries = 2
+    chunk = [{"id": i, "start": i, "end": i + 1, "text": "信息" * 100} for i in range(8)]
+    sizes = []
+
+    def fake_polish(llm, rows, *args):
+        sizes.append(len(rows))
+        ok = len(rows) <= 2
+        return ({row["id"]: row["text"] for row in rows} if ok else None), {"ok": ok}
+
+    monkeypatch.setattr(polish, "polish_chunk", fake_polish)
+    leaves = polish._process(cfg.llm, chunk, "", cfg.polish, "")
+    assert sizes == [8, 4, 2, 2, 4, 2, 2]
+    assert len(leaves) == 4 and all(leaf["report"]["ok"] for leaf in leaves)
+    assert all("raw_fallback" not in row["flags"] for leaf in leaves for row in leaf["segments"])
+
+
 def test_missing_selfcheck_field_is_not_success(cfg, monkeypatch):
     monkeypatch.setattr(polish, "_chat", lambda *a: "{}")
     with pytest.raises(ValueError):

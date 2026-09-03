@@ -1,7 +1,8 @@
 import json
 from pathlib import Path
 import pytest
-from bilidraft.config import load_config
+from bilidraft.config import Config, load_config
+from bilidraft.defaults import EXAMPLE
 from bilidraft.storage import atomic_text, read_json, task_lock, validate_bvid
 
 
@@ -15,6 +16,8 @@ from bilidraft.storage import atomic_text, read_json, task_lock, validate_bvid
         "llm:\n  reasoning_effort: endless",
         "align:\n  text_align: nope",
         "polish:\n  level: summary",
+        "structure:\n  max_batch_chars: 999",
+        "structure:\n  min_heading_sec: 200\n  target_heading_sec: 100",
         "quality:\n  min_retention: .nan",
         "llm:\n  base_url: https://user:secret@example.com/v1",
         "output_dir: ''",
@@ -43,6 +46,14 @@ def test_config_paths_and_env(tmp_path, monkeypatch):
     assert c.path(c.output_dir) == tmp_path / "my-notes"
     assert c.llm.api_key == "secret"
     assert "secret" not in repr(c)
+
+
+def test_optimized_text_defaults_match_packaged_example():
+    cfg = Config()
+    assert (cfg.polish.chunk_chars, cfg.polish.split_retries) == (2400, 2)
+    assert cfg.structure.max_batch_chars == 100000
+    example = Path("config/config.example.yaml").read_text(encoding="utf-8")
+    assert EXAMPLE == example
 
 
 @pytest.mark.parametrize(

@@ -52,6 +52,12 @@ def test_dry_run_uses_explicit_workspace_without_files_or_key_leaks(tmp_path, mo
     plan = json.loads(result.output)
     assert plan["workspace"] == str(workspace.resolve())
     assert plan["model"] == "chosen-model"
+    assert plan["text_processing"] == {
+        "chunk_chars": 2400,
+        "split_retries": 2,
+        "max_workers": 2,
+        "structure_max_batch_chars": 100000,
+    }
     assert "PRIVATE_DRY_RUN_SECRET" not in result.output
     assert not workspace.exists()
 

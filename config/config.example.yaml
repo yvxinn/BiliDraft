@@ -10,9 +10,14 @@ llm:
   max_workers: 2
 polish:
   level: light_polish
-  chunk_chars: 600
+  chunk_chars: 2400  # 失败时会递归拆分为约 1200 / 600 字
   overlap_chars: 70
-  split_retries: 1
+  split_retries: 2
+structure:
+  max_batch_chars: 100000  # 常规课程一次读取全文；超长文本才分批
+  target_heading_sec: 180
+  min_heading_sec: 120
+  context_headings: 20
 asr:
   engine: sensevoice
   device: cpu

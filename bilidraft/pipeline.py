@@ -113,7 +113,10 @@ def _params(stage, cfg):
             "text_mode": cfg.text_mode,
             **({"llm": llm, "polish": asdict(cfg.polish)} if cfg.text_mode == "polish" else {}),
         },
-        "outline": {"text_mode": cfg.text_mode, **(llm if cfg.text_mode == "polish" else {})},
+        "outline": {
+            "text_mode": cfg.text_mode,
+            **({"llm": llm, "structure": asdict(cfg.structure)} if cfg.text_mode == "polish" else {}),
+        },
         "slides": {
             k: v
             for k, v in asdict(cfg.slides).items()

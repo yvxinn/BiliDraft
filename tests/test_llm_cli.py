@@ -86,8 +86,10 @@ def test_actual_http_client_and_model_protocol_are_local(cfg, transcript, tmp_pa
             body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
             user = json.loads(body["messages"][-1]["content"])
             seen.append(user)
-            if isinstance(user, list):
-                response = {"headings": [{"after_id": user[0]["id"], "level": 2, "title": "合成测试标题"}]}
+            if "batch" in user:
+                response = {
+                    "headings": [{"after_id": user["lines"][0]["id"], "level": 2, "title": "合成测试标题"}]
+                }
             elif "raw" in user:
                 response = {"dropped": []}
             else:

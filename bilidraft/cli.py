@@ -80,6 +80,16 @@ def run(
                     "model": cfg.llm.model,
                     "model_endpoint": cfg.llm.base_url if cfg.text_mode == "polish" else None,
                     "sends_transcript_to_model": cfg.text_mode == "polish",
+                    "text_processing": (
+                        {
+                            "chunk_chars": cfg.polish.chunk_chars,
+                            "split_retries": cfg.polish.split_retries,
+                            "max_workers": cfg.llm.max_workers,
+                            "structure_max_batch_chars": cfg.structure.max_batch_chars,
+                        }
+                        if cfg.text_mode == "polish"
+                        else None
+                    ),
                     "cached_source": {k: (task / f"{k}.json").is_file() for k in ("meta", "subtitle")},
                     "note": "Ollama cloud 模型即使使用 localhost 也可能转发到云端；API key 不在计划中输出。",
                 },

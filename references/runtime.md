@@ -8,6 +8,8 @@ Use `python <skill-dir>/scripts/run.py --workspace <workspace>` as the command p
 
 For polishing set `llm.base_url` and `llm.model`, or `BILIDRAFT_BASE_URL` and `BILIDRAFT_MODEL`. `BILIDRAFT_API_KEY` supplies the key unless YAML selects another variable. Local OpenAI-compatible servers and remote HTTPS providers are supported. HTTP is allowed only on loopback; credentials/query parameters in provider URLs are rejected. Model redirects are not followed with transcript data.
 
+The default polishing window is 2400 characters. A failed block can split twice, so only the difficult portion returns to roughly 1200 and then 600 characters before raw fallback. `structure.max_batch_chars` defaults to 100000, allowing an ordinary course to receive one global semantic outline; later batches for exceptionally long text receive recent accepted headings as context. Reduce these limits for endpoints with smaller context windows. `llm.max_workers` continues to control polishing concurrency independently.
+
 `run <video> --dry-run` reveals effective endpoint/modes without exposing keys, writing files or networking. `doctor --offline --json` checks local dependencies. Online doctor also contacts Bilibili and, in polishing mode with a configured model, makes a short model request. Raw mode never calls the LLM, including online doctor.
 
 For restricted data use `run <video> --text-mode raw --images none --resume --strict --json`. This does not repair ASR errors. To include reference pictures omit `--images none`. OCR is optional in representative mode; enable `slides.representative_ocr` only when text matching is useful. `ocr_max_side` controls analysis size; output remains full-frame.

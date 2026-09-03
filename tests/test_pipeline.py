@@ -81,6 +81,13 @@ def test_parameter_change_invalidates_downstream(cfg, fake_run):
     assert calls == {"clean": 2, "outline": 2, "slides": 1}
 
 
+def test_structure_change_only_invalidates_outline_and_dependents(cfg, fake_run):
+    pipeline.run(BVID, resume=True, cfg=cfg, progress=lambda *a: None)
+    cfg.structure.max_batch_chars += 1000
+    pipeline.run(BVID, resume=True, cfg=cfg, progress=lambda *a: None)
+    assert fake_run[2] == {"clean": 1, "outline": 2, "slides": 1}
+
+
 def test_missing_frame_is_rebuilt(cfg, fake_run):
     note, task, calls = fake_run
     pipeline.run(BVID, resume=True, cfg=cfg, progress=lambda *a: None)

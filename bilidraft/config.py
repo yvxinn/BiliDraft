@@ -102,9 +102,17 @@ class PolishCfg:
     min_length_ratio_lossless: float = 0.85
     min_length_ratio_light: float = 0.75
     sim_floor: float = 0.55
-    chunk_chars: int = 600
+    chunk_chars: int = 2400
     overlap_chars: int = 70
-    split_retries: int = 1
+    split_retries: int = 2
+
+
+@dataclass
+class StructureCfg:
+    max_batch_chars: int = 100000
+    target_heading_sec: int = 180
+    min_heading_sec: int = 120
+    context_headings: int = 20
 
 
 @dataclass
@@ -157,6 +165,7 @@ class Config:
     bilibili: BilibiliCfg = field(default_factory=BilibiliCfg)
     llm: LlmCfg = field(default_factory=LlmCfg)
     polish: PolishCfg = field(default_factory=PolishCfg)
+    structure: StructureCfg = field(default_factory=StructureCfg)
     asr: AsrCfg = field(default_factory=AsrCfg)
     slides: SlidesCfg = field(default_factory=SlidesCfg)
     align: AlignCfg = field(default_factory=AlignCfg)
@@ -250,6 +259,10 @@ def validate_config(cfg):
         "polish.min_length_ratio_lossless": (0.5, 1),
         "polish.min_length_ratio_light": (0.5, 1),
         "polish.sim_floor": (0, 1),
+        "structure.max_batch_chars": (1000, 500000),
+        "structure.target_heading_sec": (30, 1800),
+        "structure.min_heading_sec": (30, 1800),
+        "structure.context_headings": (0, 100),
         "asr.max_segment_sec": (1, 30),
         "slides.block_t": (0.01, 255),
         "slides.representative_per_10min": (1, 30),
@@ -277,6 +290,8 @@ def validate_config(cfg):
         section, key = name.split(".")
         if not low <= getattr(getattr(cfg, section), key) <= high:
             raise ValueError(f"配置 {name} 必须在 {low} 到 {high} 之间")
+    if cfg.structure.min_heading_sec > cfg.structure.target_heading_sec:
+        raise ValueError("structure.min_heading_sec 不能大于 structure.target_heading_sec")
 
 
 def load_credential(cfg=None):

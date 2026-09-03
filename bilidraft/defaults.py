@@ -1,3 +1,49 @@
 """Packaged example used by init-config."""
 
-EXAMPLE = '# 路径相对于运行命令的工作目录。API key 请使用环境变量，不要提交真实值。\ntext_mode: polish  # raw 保留原始字幕，不调用语言模型\nllm:\n  base_url: http://localhost:11434/v1\n  model: ""  # 配置你的模型，或使用 BILIDRAFT_MODEL 环境变量\n  reasoning_effort: ""  # 跟随供应商默认；Ollama 支持时可用 "none" 减少额外思考\n  api_key_env: BILIDRAFT_API_KEY\n  timeout: 300\n  retries: 2\n  max_workers: 2\npolish:\n  level: light_polish\n  chunk_chars: 600\n  overlap_chars: 70\n  split_retries: 1\nasr:\n  engine: sensevoice\n  device: cpu\n  max_segment_sec: 15\nslides:\n  mode: representative  # representative / detailed / none；密集模式需要 OCR 扩展\n  representative_per_10min: 6\n  max_frames: 60\n  max_workers: 0  # 自动，最多4个任务；设1可降为串行\n  representative_ocr: false  # 默认时间对齐；开启后才识别选中画面\n  ocr_max_side: 960\n  parallel_with_text: true\n  ocr_threads: 2\n  body_per_10min: 8\nalign:\n  text_align: true\n  similarity_threshold: 0.5\nquality:\n  min_retention: 0.90\n  max_suspect_ratio: 0.02\nbilibili:\n  max_quality: 1080\n  credential_file: config/credential.json\n  cookies_file: config/cookies.txt\noutput_dir: notes\n# ffmpeg: C:/path/to/ffmpeg.exe\n'
+EXAMPLE = """# 路径相对于运行命令的工作目录。API key 请使用环境变量，不要提交真实值。
+text_mode: polish  # raw 保留原始字幕，不调用语言模型
+llm:
+  base_url: http://localhost:11434/v1
+  model: ""  # 配置你的模型，或使用 BILIDRAFT_MODEL 环境变量
+  reasoning_effort: ""  # 跟随供应商默认；Ollama 支持时可用 "none" 减少额外思考
+  api_key_env: BILIDRAFT_API_KEY
+  timeout: 300
+  retries: 2
+  max_workers: 2
+polish:
+  level: light_polish
+  chunk_chars: 2400  # 失败时会递归拆分为约 1200 / 600 字
+  overlap_chars: 70
+  split_retries: 2
+structure:
+  max_batch_chars: 100000  # 常规课程一次读取全文；超长文本才分批
+  target_heading_sec: 180
+  min_heading_sec: 120
+  context_headings: 20
+asr:
+  engine: sensevoice
+  device: cpu
+  max_segment_sec: 15
+slides:
+  mode: representative  # representative / detailed / none；密集模式需要 OCR 扩展
+  representative_per_10min: 6
+  max_frames: 60
+  max_workers: 0  # 自动，最多4个任务；设1可降为串行
+  representative_ocr: false  # 默认时间对齐；开启后才识别选中画面
+  ocr_max_side: 960
+  parallel_with_text: true
+  ocr_threads: 2
+  body_per_10min: 8
+align:
+  text_align: true
+  similarity_threshold: 0.5
+quality:
+  min_retention: 0.90
+  max_suspect_ratio: 0.02
+bilibili:
+  max_quality: 1080
+  credential_file: config/credential.json
+  cookies_file: config/cookies.txt
+output_dir: notes
+# ffmpeg: C:/path/to/ffmpeg.exe
+"""
