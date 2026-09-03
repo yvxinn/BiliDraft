@@ -21,7 +21,7 @@ requires-python = ">=3.10"
 dependencies = [
   "typer>=0.12,<1", "requests>=2.31,<3", "PyYAML>=6,<7",
   "filelock>=3.13,<4", "yt-dlp>=2026.8.19", "numpy>=1.26,<3",
-  "Pillow>=10,<13", "ImageHash>=4.3,<5", "opencv-python>=4.8,<5",
+  "Pillow>=10,<13", "ImageHash>=4.3,<5", "opencv-python>=4.8,<6",
   "qrcode[pil]>=7.4,<9",
 ]
 
